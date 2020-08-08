@@ -13,8 +13,8 @@ export function useCancellableSWR(key, swrOptions = {}) {
   return [
     useSWR(
       key,
-      url =>
-        axios.get(url, { cancelToken: source.token }).then(res => res.data),
+      (url) =>
+        axios.get(url, { cancelToken: source.token }).then((res) => res.data),
       {
         ...swrOptions
       }

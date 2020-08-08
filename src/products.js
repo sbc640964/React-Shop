@@ -14,14 +14,20 @@ export default function Products(props) {
           <div key={product.id}>
             <Product>
               <div>
-                <ImageProduct url={product.image} />
+                <ImageProduct url={product.images[0].src} />
                 <InfoProduct>
                   <span className="title">{product.name}</span>
-                  <span className="description">{product.description}</span>
+                  <span className="description">
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: product.short_description
+                      }}
+                    ></span>
+                  </span>
                   <Price>
                     <span className="symbol">$</span>
                     <span className="price">
-                      {currencyFormat(product.price, "")}
+                      {currencyFormat(product.price, "") || 0}
                     </span>
                   </Price>
                   <AddToCart product={product} />
@@ -35,8 +41,8 @@ export default function Products(props) {
 }
 
 const Container = styled.div`
-  display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
+  display: flex;
+  flex-wrap: wrap;
   text-align: center;
   > div {
     margin: 8px;
@@ -44,22 +50,30 @@ const Container = styled.div`
 `;
 
 const Product = styled.div`
+  width: 200px;
+  height: 100%;
   margin: 0px 12px;
   > div {
+    height: 100%;
     margin: 0px -12px;
     border: 1px solid #dddddd;
+    display: flex;
+    flex-flow: column;
   }
 `;
 
 const ImageProduct = styled.div`
   width: 100%;
   height: 150px;
-  background: url("${props => props.url}") no-repeat center;
+  background: url("${(props) => props.url}") no-repeat center;
   background-size: contain;
 `;
 
 const InfoProduct = styled.div`
+  display: flex;
+  flex-flow: column;
   padding: 16px;
+  flex-grow: 1;
   > span {
     display: block;
   }
@@ -70,11 +84,12 @@ const InfoProduct = styled.div`
   }
   .description {
     text-align: left;
+    flex-grow: 1;
   }
 `;
 
 const Price = styled.span`
-  margin-top: 16px;
+  margin: 16px 0px 16px;
   .price {
     font-size: 32px;
     font-weight: bold;
